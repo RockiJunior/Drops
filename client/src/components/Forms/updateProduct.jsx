@@ -57,8 +57,9 @@ console.log(productId)
         description: '',
         price: '',
         status: '',
-        brand: '',
-        categories: [],
+        brandId: 0,
+        categoryId: [],
+        sizeId: [],
         stock:[]
   })
   
@@ -93,18 +94,21 @@ console.log(productId)
     //Funcion que maneja el cambio en el estado de pasosReceta en funcion de lo escrito en el input
     const handleChangeCategory = (e) => {
         e.preventDefault()
+        let catFilter = categories.filter(cat => cat.name === e.target.value)
+        catFilter = catFilter[0].id
+
         setInput({
             ...input,
-            categories: [...input.categories, e.target.value]
+            categoryId: [...input.categoryId, catFilter]
         })
         setCategory(e.target.value)
     }
 
     // funcion que maneja el option seleccionado del select y lo agrega al array dietas del form
     const agregarBrand = (e) => {
-          setInput({
+        setInput({
             ...input,
-            brand:  e.target.value      
+            brandId:  parseInt(e.target.value )
         })
     }
     // funcion que maneja el option seleccionado del select y lo agrega al array dietas del form
@@ -133,6 +137,7 @@ console.log(productId)
     console.log(talleUi)
     setInput( {
         ...input, 
+        sizeId: [...input.sizeId, parseInt(prueba[0].id)],
         stock: [ 
          ...input.stock,
           [parseInt(prueba[0].id), parseInt(cantidad)]
@@ -144,21 +149,25 @@ console.log(productId)
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if(input.name === undefined || input.description === undefined || input.price <= 0 ){
-            alert('El formulario esta incompleto')
-        } else {
+        if(input.name === undefined || input.image === undefined || input.description === undefined || input.price < 1 || input.status === undefined || input.brandId === undefined || input.categoryId === undefined || input.stock === undefined){
+      
+            console.log('El formulario esta incompleto')
 
+
+        } else {
+            console.log(input)
             dispatch(productForm(input))
-            
+
             setInput({
                 name: "",
                 image: "",
                 description: "",
                 price: 0,
                 status: "",
-                stock: {},
-                brand:"",
-                categories: [],
+                stock: [],
+                brandId:0,
+                sizeId: [],
+                categoryId: [],
             })
             history.push('/')
         }
@@ -167,7 +176,7 @@ console.log(productId)
     const deleteCategory = (data) => {
         setInput({
             ...input,
-            categories: input.categories.filter(
+            categoryId: input.categoryId.filter(
                 category => data !== category
             )
         })
@@ -204,19 +213,15 @@ console.log(productId)
 
                 <select onChange={ (e) => agregarDieta(e)}>
                     <option> Status </option>
-                    <option> Disponible </option>
-                    <option> Fuera de Stock </option>
+                    <option> disponible </option>
+                    <option> no disponible </option>
                 </select>
         </div>
         
         <div>
                  <select onChange={ (e) => handleTalle(e)}>
                     <option> Size </option>
-                    <option value='41'> 41 </option>
-                    <option value='42'> 42 </option>
-                    <option value='43'> 43 </option>
-                    <option value='44'> 44 </option>
-                    <option value='45'> 45 </option>
+                    { sizes && sizes.map(e => <option key={e.id} value={e.number}> {e.number} </option> ) }
                 </select>
 
                 <label> Stock <input type={'number'} name='stock' onChange={(e) => handleCantidad(e)}/></label> 
@@ -228,30 +233,30 @@ console.log(productId)
     </form>
 
     <div>
-        <h2> Categorias </h2>
-        {
-            input.categories && input.categories.map(el => {
-            return(
-                <div style={{display:"flex", justifyContent:"space-evenly"}}>
-                    <p> {el} </p>
-                    <button onClick={ () => deleteCategory(el) }> X </button>
-                </div>
-            )})
-        }
-    </div>
-
-    <div>
-    <h2> Stock </h2>
+    <h2> Categorias </h2>
     {
-        talleUi && talleUi.map(el => {
+        input.categoryId && input.categoryId.map(el => {
         return(
             <div style={{display:"flex", justifyContent:"space-evenly"}}>
-                <p key={el[0]}> {el[0]} </p>
-                <p key={el[1]}> {el[1]} </p>
+                <p> {el} </p>
                 <button onClick={ () => deleteCategory(el) }> X </button>
             </div>
         )})
     }
+</div>
+
+<div>
+<h2> Stock </h2>
+{
+    talleUi && talleUi.map(el => {
+    return(
+        <div style={{display:"flex", justifyContent:"space-evenly"}}>
+            <p key={el[0]}> {el[0]} </p>
+            <p key={el[1]}> {el[1]} </p>
+            <button onClick={ () => deleteCategory(el) }> X </button>
+        </div>
+    )})
+}
 </div>
     </div>
     

@@ -2,6 +2,7 @@
 import React, {useEffect} from 'react';
 import { getCategories } from "./redux/category/categoriesActions";
 import { getProducts } from './redux/products/productsAction';
+import { getInitialRatings } from './redux/rating/ratingActions';
 
 import {useDispatch, useSelector} from "react-redux";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
@@ -34,6 +35,7 @@ function App() {
     
   useEffect(()=>{
       dispatch(getProducts())
+      dispatch(getInitialRatings())
   },[dispatch])
   
   const productos = useSelector( state => state.productReducer.products);

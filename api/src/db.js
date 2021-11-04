@@ -81,6 +81,9 @@ Size.belongsToMany(Product, { through: ProductSize });
 Product.belongsToMany(Orders, { through: OrderDetail });
 Orders.belongsToMany(Product, { through: OrderDetail }); 
 
+Orders.hasMany(OrderDetail);//tomi
+OrderDetail.belongsTo(Orders)
+
 module.exports = {
   conn: sequelize,
   ...sequelize.models,

@@ -9,6 +9,7 @@ const brands = require('./brands/brands.js');
 const sizes = require('./sizes/sizes.js');
 const productSizes = require('./productSize/productSize.js');
 const newsletter = require('./newsletter/newsletter');
+const orders = require('./order/order');
 
 app.use('/',users);
 app.use('/reviews', reviewsRoutes);
@@ -18,5 +19,6 @@ app.use('/brands', brands);
 app.use('/productSizes', productSizes);
 app.use('/sizes', sizes);
 app.use('/newsletter', newsletter);
+app.use('/orders', orders)
 
 module.exports = app; 
